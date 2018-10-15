@@ -1,0 +1,12 @@
+<div class="container">
+  <h3>Zobacz nasze najnowsze kursy!</h3>
+  <h4>{{course.title}}</h4>
+  <p>{{ (course.content.length>20)?
+    (course.content | slice:0:20)+'..' : (course.content) }}
+  </p>
+  <!-- bindowanie przez [routerLink] -->
+  <button [routerLink]="['/courses', course.id]">Sprawdź (bindowanie [routerLink])</button><br>
+
+  <!-- metoda getCourse i Router w HomeComponent -->
+  <button (click)="getCourse()">Sprawdź (router.navigate)</button>
+</div>

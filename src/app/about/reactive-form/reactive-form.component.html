@@ -1,0 +1,41 @@
+<h4>Reactive form</h4>
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <label for="topic">Temat:</label>
+  <input focus="true" formControlName="topic" type="text" id="topic" required>
+
+  <label for="message">Wiadomość:</label>
+  <textarea formControlName="message" id="message" cols="50" rows="4"
+  minlength="20" maxlength="300" required></textarea>
+
+  <label for="name">Imię:</label>
+  <input formControlName="name" type="text" id="name" required>
+
+  <label for="email">E-mail:</label>
+  <input formControlName="email" type="email" id="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required>
+  <span *ngIf="contactForm.get('email').invalid
+    && contactForm.get('email').dirty" class="alert">
+    Wprowadź prawidłowy adres email
+  </span>
+
+  {{contactForm.get('email').touched}}
+
+  <label for="course">Który kurs jest najfajniejszy?</label>
+  <select id="course" formControlName="course">
+    <option *ngFor="let c of courses" value="{{c}}">
+      {{c}}
+    </option>
+  </select>
+
+  <div>
+    <label for="bot">Czy jesteś botem?</label>
+    <input formControlName="bot" type="radio" [value]="true"> Tak<br>
+    <input formControlName="bot" type="radio" [value]="false">Nie
+  </div>
+
+  <div class="buttons">
+    <button class="btn btn-warning btn-block" type="submit">Test bez walidacji</button>
+    <button class="btn btn-primary btn-block" type="submit" [disabled]="contactForm.invalid">Wyślij</button>
+    <button type="reset" class="btn btn-danger btn-block">Reset</button>
+  </div>
+</form>
+

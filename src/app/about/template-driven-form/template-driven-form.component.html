@@ -1,0 +1,71 @@
+<h4>Template driven</h4>
+<form (ngSubmit)="onSubmit(contactForm)" #contactForm="ngForm">
+
+  <label for="topic">Temat:</label>
+  <input #topic="ngModel" [(ngModel)]="messageTempl.topic"
+  type="text" id="topic" name="topic" required>
+
+  <ng-container *ngIf="!topic.valid && topic.touched">
+    <span class="alert">Pole wymagane!</span>
+  </ng-container>
+
+
+  <label for="message">Wiadomość:</label>
+  <textarea #message="ngModel" [(ngModel)]="messageTempl.message"
+  name="message" id="message" cols="50" rows="4"
+  minlength="20" maxlength="300" required></textarea>
+
+  <ng-container *ngIf="!message.valid && message.touched">
+    <span *ngIf="message.value === undefined || message.value === ''" class="alert">
+      Pole wymagane!
+    </span>
+    <span *ngIf="message.errors && message?.errors.minlength && message.dirty" class="alert">
+      Minimalna ilość znaków to {{ message?.errors.minlength.requiredLength }}.<br>
+      Aktualnie jest {{ message?.errors.minlength.actualLength}} .
+    </span>
+  </ng-container>
+
+
+  <label for="name">Imię:</label>
+  <input #name="ngModel" [(ngModel)]="messageTempl.name"
+  type="text" name="name" id="name" required>
+
+  <ng-container *ngIf="!name.valid && name.touched">
+    <span class="alert">
+      Pole wymagane!
+    </span>
+  </ng-container>
+
+
+  <label for="email">E-mail:</label>
+  <input #email="ngModel" [(ngModel)]="messageTempl.email"
+  type="email" name="email" id="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required>
+
+  <ng-container *ngIf="!email.valid && email.touched">
+    <span *ngIf="email.value === undefined || email.value === ''" class="alert">
+      Pole wymagane!
+    </span>
+    <span *ngIf="!email.pristine && email.value !== undefined && email.value !== ''" class="alert">
+      Wprowadź prawidłowy adres email
+    </span>
+  </ng-container>
+
+  <label for="course">Który kurs jest najfajniejszy?</label>
+  <select [(ngModel)]="messageTempl.course" name="course" id="course">
+    <option *ngFor="let c of courses" value="{{c}}">
+      {{c}}
+    </option>
+  </select>
+
+  <div>
+    <label for="bot">Czy jesteś botem?</label>
+    <input type="radio" [(ngModel)]="messageTempl.bot" [value]="true" name="bot"> Tak<br>
+    <input type="radio" [(ngModel)]="messageTempl.bot" [value]="false" name="bot" >Nie
+  </div>
+
+  <div class="buttons">
+    <button class="btn btn-warning btn-block" type="submit">Test bez walidacji</button>
+    <button class="btn btn-primary btn-block" [disabled]="messageTempl.bot === true || contactForm.invalid" type="submit">Wyślij</button>
+    <button type="reset" class="btn btn-danger btn-block" (click)="reset()">Reset</button>
+  </div>
+  </form>

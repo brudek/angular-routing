@@ -1,0 +1,8 @@
+<h3>Zacznij programować z naszymi kursami</h3>
+
+<ul>
+  <li *ngFor="let course of courses">
+    {{course.title}}
+    <button [routerLink]="[course.id]">Więcej</button>
+  </li>
+</ul>

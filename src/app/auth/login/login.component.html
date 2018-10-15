@@ -1,0 +1,22 @@
+<div *ngIf="info" class="container">
+  {{info}}
+</div>
+<div class="container">
+  <form *ngIf="!authService.user" (ngSubmit)="login(formData)" #formData = "ngForm">
+      <div>
+        <label for="email">E-mail</label>
+        <input ngModel type="email" name="email" id="email" required>
+
+        <label for="password">Hasło</label>
+        <input ngModel type="password" name="password" id="password" required>
+
+        <button class="btn btn-primary btn-block" type="submit" [disabled]="formData.invalid">Zaloguj</button>
+        <button class="btn btn-warning btn-block" (click)="signup(formData)" type="button" [disabled]="formData.invalid">Rejestracja</button>
+      </div>
+    </form>
+
+    <ng-container *ngIf="authService.user">
+      {{authService.user.email}} aktualnie jesteś zalogowany!<br>
+      <a routerLink="/home">Powrót na stronę główną</a>
+    </ng-container>
+</div>
