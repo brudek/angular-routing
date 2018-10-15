@@ -2,13 +2,23 @@
 <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
   <label for="topic">Temat:</label>
   <input focus="true" formControlName="topic" type="text" id="topic" required>
+  <span class="alert" *ngIf="contactForm.get('topic').invalid
+  && contactForm.get('topic').dirty">Wprowadź temat</span>
 
   <label for="message">Wiadomość:</label>
   <textarea formControlName="message" id="message" cols="50" rows="4"
   minlength="20" maxlength="300" required></textarea>
+  <span class="alert" *ngIf="contactForm.get('message').invalid
+  && contactForm.get('message').dirty">
+    <ng-container *ngIf="contactForm.get('message').errors
+    && contactForm.get('message').errors['minlength']">Wpisz minimum {{contactForm.get('message').errors['minlength'].requiredLength}} znaków.</ng-container>
+    <ng-container *ngIf="contactForm.get('message').errors['required']">Wiadomość wymagana</ng-container>
+  </span>
 
   <label for="name">Imię:</label>
   <input formControlName="name" type="text" id="name" required>
+  <span class="alert" *ngIf="contactForm.get('name').invalid
+  && contactForm.get('name').dirty">Podaj swoje imię</span>
 
   <label for="email">E-mail:</label>
   <input formControlName="email" type="email" id="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required>
@@ -16,8 +26,6 @@
     && contactForm.get('email').dirty" class="alert">
     Wprowadź prawidłowy adres email
   </span>
-
-  {{contactForm.get('email').touched}}
 
   <label for="course">Który kurs jest najfajniejszy?</label>
   <select id="course" formControlName="course">
@@ -32,10 +40,20 @@
     <input formControlName="bot" type="radio" [value]="false">Nie
   </div>
 
+  <label for="questions">Jaki język programowania chciałbyś dodatkowo poznać?</label>
+  <div formArrayName="questions">
+    <div *ngFor="let question of contactForm.get('questions')['controls']; let i = index">
+      {{i + 1}}<input type="text" [formControlName]="i">
+    </div>
+    <div class="alert" *ngIf="contactForm.get('questions')['errors']
+    && contactForm.get('questions')['errors'].forbiddenCourse">Zakazany kurs!</div>
+    <button class="btn btn-primary" type="button" (click)="addQuestion()">Dodaj dodatkowe pole</button>
+  </div>
+
   <div class="buttons">
     <button class="btn btn-warning btn-block" type="submit">Test bez walidacji</button>
-    <button class="btn btn-primary btn-block" type="submit" [disabled]="contactForm.invalid">Wyślij</button>
-    <button type="reset" class="btn btn-danger btn-block">Reset</button>
+    <button class="btn btn-primary btn-block" type="submit" [disabled]="contactForm.invalid || contactForm.get('bot').value === true">Wyślij</button>
+    <button type="button" class="btn btn-danger btn-block" (click)="onReset()">Reset</button>
   </div>
 </form>
 
